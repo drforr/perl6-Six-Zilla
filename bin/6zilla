@@ -1,0 +1,37 @@
+#!/usr/bin/env perl6
+
+use Six::Zilla;
+
+sub MAIN( Str $function, Bool :$verbose, *@args ) {
+	say "Verbose: $verbose";
+	say "running $function";
+
+	my $six = Six::Zilla::Plugins::$function.new;
+
+	if @args.grep: '--help' {
+		my $six = Six::Zilla::Plugins::$function.new;
+		my $usage = $six.CLI-usage;
+		say $usage;
+		exit 0;
+	}
+
+	my $exit-code = $six.CLI-validate( @args );
+	if $exit-code != 0 {
+		my $msg = $six.CLI-error-message( @args );
+		my $usage = $six.CLI-usage;
+
+		$*ERR.say( $msg );
+		$*OUT.say( $usage );
+		exit $exit-code;
+	}
+	else {
+		try {
+			$six.run( @args );
+		}
+		CATCH {
+			die $_;
+		}
+	}
+}
+
+# vim: ft=perl6
