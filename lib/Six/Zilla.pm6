@@ -1,6 +1,8 @@
 use v6;
 
 role Six::Zilla {
+	has Bool $.verbose; # From CLI, users can assume it is properly set.
+
 	method CLI-validate( @args ) returns Int { !!! }
 	method CLI-usage returns Str { !!! }
 	method CLI-error-message( @args ) returns Str { !!! }

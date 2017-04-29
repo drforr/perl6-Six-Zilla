@@ -23,6 +23,19 @@ Installation
     zef update && zef install ANTLR4
 ```
 
+Setup
+=====
+
+```
+    $ 6zilla setup
+
+    or
+
+    $ 6zilla setup -i # Run interactively, prompt for configuration
+```
+
+Creates $HOME/.6zilla/config.yml
+
 ## Testing
 
 To run tests:
@@ -33,7 +46,7 @@ To run tests:
 
 ## Author
 
-Jeffrey Goff, DrFOrr on #perl6, https://github.com/drforr/
+Jeffrey Goff, DrForr on #perl6, https://github.com/drforr/
 
 ## License
 
