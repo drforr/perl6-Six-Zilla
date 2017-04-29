@@ -1,14 +1,14 @@
 =begin pod
 
-=head1 Six::Zilla::Plugins::Setup
+=head1 Six::Zilla::Plugins::New
 
 =head2 Synopsis
 
-Create $HOME/.6zilla/config.yml - Should be run once when the module is first downloaded, and afterward only as indicated in the README.
+Create a new distribution.
 
 =head2 Options
 
--i or --interactive - Prompt user for default settings.
+-i or --interactive - Prompt user for distribution settings.
 
 Set up the user's configuration file. If '-i' or '--interactive' is passed, then prompt the user for settings such as email address (not sent anywhere) or GitHub ID (the same.) Default settings read from L<.gitconfig> appear in [square brackets].
 
@@ -29,49 +29,101 @@ rights:
 git:
   source_url: {source_url}
   username: {username}
-distribution:
-  directory_prefix: perl6
 END
 
-class Six::Zilla::Plugins::Setup {
+# Current directory structure looks like:
+#
+# perl6-Project-Name
+# perl6-Project-Name/lib
+# perl6-Project-Name/lib/Project/Name.pm6
+# perl6-Project-Name/t
+# perl6-Project-Name/t/00-core.t
+# perl6-Project-Name/.gitignore
+# perl6-Project-Name/.travis.yml
+# perl6-Project-Name/META6.json
+# perl6-Project-Name/README.md
+
+my $template-lib-Project-Name = Q:to{END};
+use v6;
+
+=begin pod
+
+=head1 {$project-name}
+
+=head2 Synopsis
+
+=end pod
+
+class {$project-name} {
+}
+END
+
+my $template-t-core = Q:to{END};
+use v6;
+use Test;
+use {$project-name};
+
+plan 1;
+
+ok 1;
+
+# {$editor-line}
+END
+
+my $template-dot-gitignore = Q:to{END};
+*.swp
+*.swo
+lib/.precomp
+END
+
+my $template-dot-travis = Q:to{END};
+language: perl6
+sudo: true
+perl6:
+  - latest
+install:
+  - rakudbrew build-panda
+  - panda installdeps .
+  - panda installdeps .
+END
+
+# Don't create a META6.json template, just generate data directly.
+
+my $template-README = Q:to{END};
+{$project-name}
+{$project-name-underline}
+
+Write about {$project-name} here.
+
+Installation
+============
+
+* Using zef (a module management tool bundled with Rakudo Star):
+
+```
+    zef update && zef install ANTLR4
+```
+
+Testing
+=======
+
+To run tests:
+
+```
+    prove -e'perl6 -Ilib'
+```
+
+Author
+======
+{$git-name}, {$git-url}
+
+License
+=======
+{$license}
+END
+
+class Six::Zilla::Plugins::New {
 	also does Six::Zilla;
-
-	# From the current META6.json:
-	#
-	# tags - only useful on a per-module basis.
-	# provides - only useful on a per-module basis
-	# test-depends - Maybe make 'Test' a default?
-	has Str @.test-depends = <Test>;
-
-	# support - github username in 'source' section
-	has Str $.github-username;
-
-	# perl - default perl6 version
-	has Str $.perl-version = Q{6.c};
-
-	# build-depends - nothing?
-	# auth - github username
-	# source-url - github username
-	# depends - only useful on a per-module basis
-	# authors - git name, git email
-	has Str $.git-name;
-	has Str $.git-email;
-
-	# version - only useful on a per-module basis
-	# license
-	has Str $.license;
-
-	# description - only useful on a perl-module basis
-
-	# Create .gitignore from template
-
-	# on to .travis.yml
-	has Str $.default-installer = 'zef';
-
-	# Author line in README
-	# License
-
-
 
 	method defaults-from-git {
 		my $git-config;

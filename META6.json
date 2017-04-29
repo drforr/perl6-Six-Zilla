@@ -1,38 +1,34 @@
 {
    "meta6" : "0",
    "tags" : [
-		"ANTLR",
-		"ANTLR4",
-		"Grammar",
-		"Transform",
-		"Languages",
-		"parse",
-		"parser",
-		"parsing"
+	"distributions",
+	"modules",
+	"creation"
    ],
    "provides" : {
-      "ANTLR4::Grammar" : "lib/ANTLR4/Grammar.pm6",
-      "ANTLR4::Actions::AST" : "lib/ANTLR4/Actions/AST.pm6"
-      "ANTLR4::Actions::Perl6" : "lib/ANTLR4/Actions/Perl6.pm6"
+	"Six::Zilla" : "lib/Six/Zilla.pm6",
+	"Six::Zilla::Plugins::New" : "lib/Six/Zilla/Plugins/New.pm6",
+	"Six::Zilla::Plugins::Setup" : "lib/Six/Zilla/Plugins/Setup.pm6"
    },
    "test-depends" : [
-      "Test",
-      "JSON::Tiny"
+	"Test",
+	"JSON::Tiny",
+	"YAML"
    ],
    "support" : {
-      "source" : "https://github.com/drforr/perl6-ANTLR4"
+	"source" : "https://github.com/drforr/perl6-Six-Zilla"
    },
    "perl" : "6.c",
    "build-depends" : [],
    "auth" : "github:drforr",
-   "source-url" : "https://github.com/drforr/perl6-ANTLR4.git",
+   "source-url" : "https://github.com/drforr/perl6-Six-Zilla.git",
    "depends" : [
    ],
-   "name" : "ANTLR4",
+   "name" : "Six::Zilla",
    "authors" : [
       "Jeffrey Goff <drforr@pobox.com>"
    ],
-   "version" : "0.0.5",
+   "version" : "0.0.1",
    "license" : "Artistic",
-   "description" : "Turn ANTLR4 Grammarb into Perl 6 Grammars"
+   "description" : "Help create Perl 6 module distributions"
 }
