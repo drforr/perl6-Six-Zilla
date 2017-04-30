@@ -2,11 +2,31 @@ use v6;
 
 role Six::Zilla {
 	has Bool $.verbose; # From CLI, users can assume it is properly set.
+	has Bool $.help;    # From CLI - usually handled before plugins run.
 
 	method CLI-validate( @args ) returns Int { !!! }
 	method CLI-usage returns Str { !!! }
 	method CLI-error-message( @args ) returns Str { !!! }
 	method run( @argv ) { !!! }
+}
+
+role Six::Zilla::Utils {
+
+	# 'my-project-name' => 'My::Project::Name'
+	#
+	method to-module-name( Str $project ) {
+		join( "::", map { tc( $_ ) }, $project.split( / '-' | '::' / ) );
+	}
+
+	# 'my-project-name' => 'Project/Name.pm6'
+	#
+	method to-filename( Str $project ) {
+		join( "/", map { tc( $_ ) }, $project.split( / '-' | '::' / ) );
+	}
+
+	method to-github-URL( Str $project ) {
+		qq{https://github.com/$.github-username/$project};
+	}
 }
 
 =begin DOCUMENTATION
@@ -41,8 +61,6 @@ This should generally look like below, but you of course are free to use whateve
 
     usage: 6zilla [options] setup [custom-options]
         -i, --interactive	Prompt the user for information
-
-The 'usage: 6zilla...' line is generated for you automatically, because this is theoretically common to all plugins. If you want to display a completely custom message, add C<'### no-default'> at the start of your string to suppress this.
 
 =item CLI-error-message( @args )
 

@@ -2,22 +2,23 @@
 
 use Six::Zilla;
 
-sub MAIN( Str $function, Bool :$verbose, *@args ) {
-	say "Verbose: $verbose";
-	say "running $function";
+sub MAIN( Str $function, Bool :$verbose, Bool :$help, *@args ) {
+#	say "Verbose: $verbose";
+#	say "running $function";
 
-	my $six = Six::Zilla::Plugins::$function.new;
+	my $six = Six::Zilla::Plugins::$function.new(
+		verbose => $verbose,
+		help    => $help
+	);
 
-	if @args.grep: '--help' {
-		my $six = Six::Zilla::Plugins::$function.new;
-		my $usage = $six.CLI-usage;
-		say $usage;
+	if $help {
+		say $six.CLI-usage;
 		exit 0;
 	}
 
 	my $exit-code = $six.CLI-validate( @args );
 	if $exit-code != 0 {
-		my $msg = $six.CLI-error-message( @args );
+		my $msg   = $six.CLI-error-message( @args );
 		my $usage = $six.CLI-usage;
 
 		$*ERR.say( $msg );

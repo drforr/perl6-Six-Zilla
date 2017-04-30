@@ -11,9 +11,7 @@
 	"Six::Zilla::Plugins::Setup" : "lib/Six/Zilla/Plugins/Setup.pm6"
    },
    "test-depends" : [
-	"Test",
-	"JSON::Tiny",
-	"YAML"
+	"Test"
    ],
    "support" : {
 	"source" : "https://github.com/drforr/perl6-Six-Zilla"
@@ -23,6 +21,8 @@
    "auth" : "github:drforr",
    "source-url" : "https://github.com/drforr/perl6-Six-Zilla.git",
    "depends" : [
+	"YAML",
+	"JSON::Tiny"
    ],
    "name" : "Six::Zilla",
    "authors" : [

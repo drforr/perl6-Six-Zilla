@@ -17,114 +17,20 @@ Set up the user's configuration file. If '-i' or '--interactive' is passed, then
 use v6;
 
 use Six::Zilla;
-
-my $template-config = Q:to{END};
----
-user:
-  name: {name}
-  email: {email}
-rights:
-  license: {license}
-  copyright_holder: {name}
-git:
-  source_url: {source_url}
-  username: {username}
-END
-
-# Current directory structure looks like:
-#
-# perl6-Project-Name
-# perl6-Project-Name/lib
-# perl6-Project-Name/lib/Project/Name.pm6
-# perl6-Project-Name/t
-# perl6-Project-Name/t/00-core.t
-# perl6-Project-Name/.gitignore
-# perl6-Project-Name/.travis.yml
-# perl6-Project-Name/META6.json
-# perl6-Project-Name/README.md
-
-my $template-lib-Project-Name = Q:to{END};
-use v6;
-
-=begin pod
-
-=head1 {$project-name}
-
-=head2 Synopsis
-
-=end pod
-
-class {$project-name} {
-}
-END
-
-my $template-t-core = Q:to{END};
-use v6;
-use Test;
-use {$project-name};
-
-plan 1;
-
-ok 1;
-
-# {$editor-line}
-END
-
-my $template-dot-gitignore = Q:to{END};
-*.swp
-*.swo
-lib/.precomp
-END
-
-my $template-dot-travis = Q:to{END};
-language: perl6
-sudo: true
-perl6:
-  - latest
-install:
-  - rakudbrew build-panda
-  - panda installdeps .
-  - panda installdeps .
-END
-
-# Don't create a META6.json template, just generate data directly.
-
-my $template-README = Q:to{END};
-{$project-name}
-{$project-name-underline}
-
-Write about {$project-name} here.
-
-Installation
-============
-
-* Using zef (a module management tool bundled with Rakudo Star):
-
-```
-    zef update && zef install ANTLR4
-```
-
-Testing
-=======
-
-To run tests:
-
-```
-    prove -e'perl6 -Ilib'
-```
-
-Author
-======
-{$git-name}, {$git-url}
-
-License
-=======
-{$license}
-END
+use Six::Zilla::Templates;
 
 class Six::Zilla::Plugins::New {
 	also does Six::Zilla;
 
+	has Str $.project-name;
+	has Str $.github-username;
+
+	use YAML;
+
+	method load-configuration {
+	}
+
+#`(
 	method defaults-from-git {
 		my $git-config;
 		if %*ENV<HOME> {
@@ -157,7 +63,9 @@ class Six::Zilla::Plugins::New {
 		}
 		close $fh;
 	}
+)
 
+#`(
 	method prompt-for-settings {
 		say "(settings are only written locally)";
 		say '';
@@ -170,7 +78,7 @@ class Six::Zilla::Plugins::New {
 		);
 		$.git-name = $git-name if $git-name ~~ /\S/;
 	}
-
+)
 
 	method CLI-validate( @args ) returns Bool {
 		True;
@@ -178,18 +86,19 @@ class Six::Zilla::Plugins::New {
 
 	method CLI-usage {
 		Q:to{END}
-		-i, --interactive	Interactively generate configuration
-	END
+		usage: 6zilla [options] new project-name
+			-i, --interactive	Interactively create project
+		END
 	}
 
 	# For the moment, no error messages.
 	method CLI-error-message( @args ) { Any }
 
 	method run( @args ) {
-		self.defaults-from-git;
-		if grep { / ^ '--' interactive | '-' i / }, @args {
-			self.prompt-for-settings;
-		}
+#		self.defaults-from-git;
+#		if grep { / ^ '--' interactive | '-' i / }, @args {
+#			self.prompt-for-settings;
+#		}
 	}
 }
 

@@ -107,7 +107,7 @@ class Six::Zilla::Plugins::Setup {
 	}
 
 	method prompt-for-settings {
-		say "(settings are only written locally)";
+		say "(settings are only written locally)" if $.verbose;
 		say '';
 		my $git-email = prompt(
 			"GitHub email [$.git-email]: "
@@ -126,8 +126,9 @@ class Six::Zilla::Plugins::Setup {
 
 	method CLI-usage {
 		Q:to{END}
-		-i, --interactive	Interactively generate configuration
-	END
+		usage: 6zilla [options] setup [custom-options]
+			-i, --interactive	Interactively generate configuration
+		END
 	}
 
 	# For the moment, no error messages.
